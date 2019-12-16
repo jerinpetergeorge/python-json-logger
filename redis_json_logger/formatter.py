@@ -1,10 +1,10 @@
 import json
+import logging
 import traceback as tb
-from logging import Formatter
 from .functions import get_current_time_iso
 
 
-class JSONFormatter(Formatter):
+class JSONFormatter(logging.Formatter):
     required_fields = '__all__'
     exclude_fields = None
     default_datetime_format = '%Y-%m-%d %H:%M:%S'
