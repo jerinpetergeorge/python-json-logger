@@ -1,13 +1,11 @@
 import json
 import logging
 import traceback as tb
-from .functions import get_current_time_iso
 
 
 class JSONFormatter(logging.Formatter):
     required_fields = '__all__'
     exclude_fields = None
-    default_datetime_format = '%Y-%m-%d %H:%M:%S'
 
     def __init__(self, required_fields=None, exclude_fields=None, datefmt=None):
         if required_fields:
@@ -17,7 +15,7 @@ class JSONFormatter(logging.Formatter):
             self.exclude_fields = exclude_fields
 
         if not datefmt:
-            self.datefmt = self.default_datetime_format
+            self.datefmt = self.default_time_format
         else:
             self.datefmt = datefmt
 
@@ -102,13 +100,12 @@ class JSONFormatter(logging.Formatter):
 
 
 class LogStashJSONFormatter(JSONFormatter):
-    default_datetime_format = '%Y-%m-%dT%H:%M:%S'
+    default_time_format = '%Y-%m-%d %H:%M:%SZ'
 
     def usesTime(self):
         return True
 
     def optimize_log_fields(self, python_log_dict):
         python_log_dict = super().optimize_log_fields(python_log_dict)
-        timestamp = python_log_dict.pop('asctime') if 'asctime' in python_log_dict else get_current_time_iso(self.default_datetime_format)
-        python_log_dict['@timestamp'] = timestamp
+        python_log_dict['@timestamp'] = python_log_dict.pop('asctime')
         return python_log_dict
