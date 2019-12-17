@@ -100,7 +100,7 @@ class JSONFormatter(logging.Formatter):
 
 
 class LogStashJSONFormatter(JSONFormatter):
-    default_time_format = '%Y-%m-%d %H:%M:%SZ'
+    default_time_format = '%Y-%m-%dT%H:%M:%SZ'  # ISO format with UTC notation
 
     def usesTime(self):
         return True
